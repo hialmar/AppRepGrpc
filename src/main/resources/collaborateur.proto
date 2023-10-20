@@ -1,0 +1,15 @@
+syntax = "proto3";
+package collaborateur;
+import "common.proto";
+option java_package = "com.proto.collaborateur";
+option java_multiple_files = true;
+message CollaborateurRequest { string codeColl = 1;
+}
+message RefCollaborateurResponse {
+  common.Identite identite = 1;
+  common.Contact contact = 2;
+}
+service GestionCollaborateursService{
+  //appel RPC unaire pour obtenir les références (identité et contact) d'un collaborateur désigné par son ID
+  rpc getReferenceCollaborateur(CollaborateurRequest) returns (RefCollaborateurResponse) {};
+}

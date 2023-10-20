@@ -1,0 +1,20 @@
+syntax = "proto3";
+package common;
+option java_package = "com.proto.common"; option java_multiple_files = true;
+enum nivExp { NOVICE = 0;
+  INTER = 1; AVANCE = 2; EXPERT = 3;
+}
+message Competence {
+  string codeColl = 1;
+  string sujet = 2;
+  nivExp niveau = 3;
+}
+message Identite {
+  string nom = 1;
+  string prenom = 2;
+}
+message Contact {
+  string locbureau = 1;
+  string phone = 2;
+  string email = 3;
+}

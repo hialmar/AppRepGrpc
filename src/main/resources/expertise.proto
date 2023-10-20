@@ -1,0 +1,54 @@
+syntax = "proto3";
+import "common.proto";
+import "google/protobuf/empty.proto"; // pouvoir utiliser le type protobuf prédéfini Empty package expertise;
+option java_package = "com.proto.expertise";
+option java_multiple_files = true;
+message ExpertiseRequest {
+  string sujet = 1;
+  common.nivExp niveau = 2;
+}
+message ExpertiseSujetRequest {
+  string sujet = 1;
+}
+message ExpertiseNiveauRequest {
+  common.nivExp niveau = 1;
+}
+message ExpertiseResponse {
+  common.Competence comp = 1;
+}
+message RecoExpertResponse {
+  common.nivExp niveau = 1;
+  common.Identite identite = 2;
+  common.Contact contact = 3;
+}
+message AddExpertiseRequest {
+  common.Competence comp = 1;
+}
+message EmptyResponse {
+  google.protobuf.Empty e = 1;
+}
+message ExpertiseCollRequest {
+  string noColl = 1;
+}
+message RemoveExpertiseCollResponse {
+  uint32 nbSupp = 1;
+}
+
+service ExpertiseService{
+  //appel RPC unaire pour obtenir une compétence (la première trouvée) sur un sujet d'un niveau donné
+  rpc getCompetence(ExpertiseRequest) returns (ExpertiseResponse) {};
+  // appel RPC stream réponses pour obtenir une liste de compétences d'un niveau donné sur un sujet donné
+  rpc getCompetencesNivSujet(ExpertiseRequest) returns (stream ExpertiseResponse) {};
+  // appel RPC stream réponses pour obtenir une liste de compétences de tous niveaux sur un sujet donné
+  rpc getCompetencesSujet(ExpertiseSujetRequest) returns (stream ExpertiseResponse) {};
+  // appel RPC stream réponses pour obtenir une liste de compétences d'un niveau donné quelque soit le sujet
+  rpc getCompetencesNiveau(ExpertiseNiveauRequest) returns (stream ExpertiseResponse) {};
+  // appel RPC unaire pour ajout d'une comptence dans le catalogue
+  rpc addCompetence(AddExpertiseRequest) returns (EmptyResponse) {};
+  // appel RPC stream requête Client pour supprimer toutes les compétences d'un collaborateur
+  rpc removeCompetencesColl(stream ExpertiseCollRequest) returns (RemoveExpertiseCollResponse) {}
+}
+service RecoExpertiseService{
+  // recommandation d'experts sur un sujet donné
+  rpc giveAllExpertsSujet(ExpertiseSujetRequest) returns (stream RecoExpertResponse) {};
+}
